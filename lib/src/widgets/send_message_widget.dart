@@ -85,6 +85,16 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
     super.didChangeDependencies();
     if (chatViewIW != null) {
       currentUser = chatViewIW!.chatController.currentUser;
+      chatViewIW!.chatController.replyMessageNotifier
+          .addListener(_onReplyMessageRequest);
+    }
+  }
+
+  void _onReplyMessageRequest() {
+    final message = chatViewIW?.chatController.replyMessageNotifier.value;
+    if (message != null) {
+      assignReplyMessage(message);
+      chatViewIW?.chatController.replyMessageNotifier.value = null;
     }
   }
 
@@ -252,27 +262,27 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
     onCloseTap();
   }
 
-  // void assignReplyMessage(Message message) {
-  //   if (currentUser == null) {
-  //     return;
-  //   }
-  //   FocusScope.of(context).requestFocus(_focusNode);
-  //   _replyMessage = ReplyMessage(
-  //     message: message.message,
-  //     replyBy: currentUser!.id,
-  //     replyTo: message.sentBy,
-  //     messageType: message.messageType,
-  //     messageId: message.id,
-  //     voiceMessageDuration: message.voiceMessageDuration,
-  //   );
+  void assignReplyMessage(Message message) {
+    if (currentUser == null) {
+      return;
+    }
+    FocusScope.of(context).requestFocus(_focusNode);
+    _replyMessage = ReplyMessage(
+      message: message.message,
+      replyBy: currentUser!.id,
+      replyTo: message.sentBy,
+      messageType: message.messageType,
+      messageId: message.id,
+      voiceMessageDuration: message.voiceMessageDuration,
+    );
 
-  //   if (_replyMessageTextFieldViewKey.currentState == null) {
-  //     setState(() {});
-  //   } else {
-  //     _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
-  //         _replyMessage;
-  //   }
-  // }
+    if (_replyMessageTextFieldViewKey.currentState == null) {
+      setState(() {});
+    } else {
+      _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
+          _replyMessage;
+    }
+  }
 
   void onCloseTap() {
     if (_replyMessageTextFieldViewKey.currentState == null) {
@@ -294,29 +304,10 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   void dispose() {
+    chatViewIW?.chatController.replyMessageNotifier
+        .removeListener(_onReplyMessageRequest);
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 }
-void assignReplyMessage(Message message) {
-    if (currentUser == null) {
-      return;
-    }
-    FocusScope.of(context).requestFocus(_focusNode);
-    _replyMessage = ReplyMessage(
-      message: message.message,
-      replyBy: currentUser!.id,
-      replyTo: message.sentBy,
-      messageType: message.messageType,
-      messageId: message.id,
-      voiceMessageDuration: message.voiceMessageDuration,
-    );
-
-    if (_replyMessageTextFieldViewKey.currentState == null) {
-      setState(() {});
-    } else {
-      _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
-          _replyMessage;
-    }
-  }
