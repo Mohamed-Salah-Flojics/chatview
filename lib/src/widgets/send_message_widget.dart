@@ -252,27 +252,27 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
     onCloseTap();
   }
 
-  void assignReplyMessage(Message message) {
-    if (currentUser == null) {
-      return;
-    }
-    FocusScope.of(context).requestFocus(_focusNode);
-    _replyMessage = ReplyMessage(
-      message: message.message,
-      replyBy: currentUser!.id,
-      replyTo: message.sentBy,
-      messageType: message.messageType,
-      messageId: message.id,
-      voiceMessageDuration: message.voiceMessageDuration,
-    );
+  // void assignReplyMessage(Message message) {
+  //   if (currentUser == null) {
+  //     return;
+  //   }
+  //   FocusScope.of(context).requestFocus(_focusNode);
+  //   _replyMessage = ReplyMessage(
+  //     message: message.message,
+  //     replyBy: currentUser!.id,
+  //     replyTo: message.sentBy,
+  //     messageType: message.messageType,
+  //     messageId: message.id,
+  //     voiceMessageDuration: message.voiceMessageDuration,
+  //   );
 
-    if (_replyMessageTextFieldViewKey.currentState == null) {
-      setState(() {});
-    } else {
-      _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
-          _replyMessage;
-    }
-  }
+  //   if (_replyMessageTextFieldViewKey.currentState == null) {
+  //     setState(() {});
+  //   } else {
+  //     _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
+  //         _replyMessage;
+  //   }
+  // }
 
   void onCloseTap() {
     if (_replyMessageTextFieldViewKey.currentState == null) {
@@ -299,3 +299,24 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
     super.dispose();
   }
 }
+void assignReplyMessage(Message message) {
+    if (currentUser == null) {
+      return;
+    }
+    FocusScope.of(context).requestFocus(_focusNode);
+    _replyMessage = ReplyMessage(
+      message: message.message,
+      replyBy: currentUser!.id,
+      replyTo: message.sentBy,
+      messageType: message.messageType,
+      messageId: message.id,
+      voiceMessageDuration: message.voiceMessageDuration,
+    );
+
+    if (_replyMessageTextFieldViewKey.currentState == null) {
+      setState(() {});
+    } else {
+      _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
+          _replyMessage;
+    }
+  }

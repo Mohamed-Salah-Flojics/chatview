@@ -65,7 +65,7 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
 
   @override
   Widget build(BuildContext context) {
-    final replyTitle = "${PackageStrings.currentLocale.replyTo} $_replyTo";
+    final replyTitle = "$_replyTo";
 
     return ChatTextFieldViewBuilder<ReplyMessage>(
       valueListenable: replyMessage,
