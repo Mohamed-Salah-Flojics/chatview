@@ -152,7 +152,6 @@ class _ChatListWidgetState extends State<ChatListWidget> {
         SnackBar(
           duration: const Duration(minutes: 1),
           backgroundColor: replyPopup?.backgroundColor ?? Colors.transparent,
-          margin: EdgeInsets.zero,
           elevation: 0,
           padding: EdgeInsets.zero,
           content: replyPopup?.replyPopupBuilder?.call(
