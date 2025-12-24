@@ -45,7 +45,7 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
       ? context.chatViewIW?.chatController.getUserFromId(replyMessage.replyTo)
       : null;
 
-  String _replyTo(ReplyMessage replyMessage) {
+  String _getReplyToName(ReplyMessage replyMessage) {
     if (replyMessage.replyTo == currentUser?.id) {
       return PackageStrings.currentLocale.you;
     }
@@ -71,7 +71,7 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
     return ChatTextFieldViewBuilder<ReplyMessage>(
       valueListenable: replyMessage,
       builder: (_, state, child) {
-        final replyTitle = _replyTo(state);
+        final replyTitle = _getReplyToName(state);
         if (state.message.isEmpty) {
           return const SizedBox.shrink();
         }

@@ -52,13 +52,15 @@ class ReplyMessageWidget extends StatelessWidget {
     final chatController = ChatViewInheritedWidget.of(context)?.chatController;
     final currentUser = chatController?.currentUser;
     final replyBySender = message.replyMessage.replyBy == currentUser?.id;
-    final sentBySender = message.replyMessage.replyTo == currentUser?.id;
+    final isReplyToCurrentUser =
+        message.replyMessage.replyTo == currentUser?.id;
     final textTheme = Theme.of(context).textTheme;
     final replyMessage = message.replyMessage.message;
-    final messagedUser =
-        chatController?.getUserFromId(message.replyMessage.replyBy);
-    final replyBy =
-        sentBySender ? PackageStrings.currentLocale.you : messagedUser?.name;
+    final repliedUser =
+        chatController?.getUserFromId(message.replyMessage.replyTo);
+    final replyToName = isReplyToCurrentUser
+        ? PackageStrings.currentLocale.you
+        : repliedUser?.name;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -75,8 +77,7 @@ class ReplyMessageWidget extends StatelessWidget {
               replyBySender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Text(
-              // "${PackageStrings.currentLocale.repliedBy} $replyBy",
-              replyBy ?? '',
+              replyToName ?? '',
               style: repliedMessageConfig?.replyTitleTextStyle ??
                   textTheme.bodyMedium!
                       .copyWith(fontSize: 14, letterSpacing: 0.3),
