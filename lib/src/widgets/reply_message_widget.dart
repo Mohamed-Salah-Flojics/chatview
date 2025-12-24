@@ -74,7 +74,8 @@ class ReplyMessageWidget extends StatelessWidget {
               replyBySender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Text(
-              "${PackageStrings.currentLocale.repliedBy} $replyBy",
+              // "${PackageStrings.currentLocale.repliedBy} $replyBy",
+              replyBy ?? '',
               style: repliedMessageConfig?.replyTitleTextStyle ??
                   textTheme.bodyMedium!
                       .copyWith(fontSize: 14, letterSpacing: 0.3),
