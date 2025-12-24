@@ -40,14 +40,17 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
 
   ChatUser? currentUser;
 
-  ChatUser? get repliedUser => replyMessage.value.replyTo.isNotEmpty
-      ? context.chatViewIW?.chatController
-          .getUserFromId(replyMessage.value.replyTo)
+  ChatUser? _repliedUser(ReplyMessage replyMessage) => replyMessage
+          .replyTo.isNotEmpty
+      ? context.chatViewIW?.chatController.getUserFromId(replyMessage.replyTo)
       : null;
 
-  String get _replyTo => replyMessage.value.replyTo == currentUser?.id
-      ? PackageStrings.currentLocale.you
-      : repliedUser?.name ?? '';
+  String _replyTo(ReplyMessage replyMessage) {
+    if (replyMessage.replyTo == currentUser?.id) {
+      return PackageStrings.currentLocale.you;
+    }
+    return _repliedUser(replyMessage)?.name ?? '';
+  }
 
   @override
   void initState() {
@@ -65,13 +68,10 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
 
   @override
   Widget build(BuildContext context) {
-    final replyTitle = replyMessage.value.replyTo == currentUser?.id
-        ? PackageStrings.currentLocale.you
-        : repliedUser?.name ?? '';
-
     return ChatTextFieldViewBuilder<ReplyMessage>(
       valueListenable: replyMessage,
       builder: (_, state, child) {
+        final replyTitle = _replyTo(state);
         if (state.message.isEmpty) {
           return const SizedBox.shrink();
         }
