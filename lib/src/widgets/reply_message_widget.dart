@@ -56,8 +56,9 @@ class ReplyMessageWidget extends StatelessWidget {
         message.replyMessage.replyTo == currentUser?.id;
     final textTheme = Theme.of(context).textTheme;
     final replyMessage = message.replyMessage.message;
-    final repliedUser =
-        chatController?.getUserFromId(message.replyMessage.replyTo);
+    final repliedUser = message.replyMessage.replyTo.trim().isNotEmpty
+        ? chatController?.getUserFromId(message.replyMessage.replyTo)
+        : null;
     final replyToName = isReplyToCurrentUser
         ? PackageStrings.currentLocale.you
         : repliedUser?.name;

@@ -40,8 +40,9 @@ class ReplyMessageViewState extends State<ReplyMessageView> {
 
   ChatUser? currentUser;
 
-  ChatUser? _repliedUser(ReplyMessage replyMessage) => replyMessage
-          .replyTo.isNotEmpty
+  ChatUser? _repliedUser(ReplyMessage replyMessage) => replyMessage.replyTo
+          .trim()
+          .isNotEmpty
       ? context.chatViewIW?.chatController.getUserFromId(replyMessage.replyTo)
       : null;
 
