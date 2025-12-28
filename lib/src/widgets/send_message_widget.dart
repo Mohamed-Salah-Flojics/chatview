@@ -79,22 +79,31 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
   ReplyMessage get replyMessage => _replyMessage;
 
   ChatUser? currentUser;
+  ChatController? _chatController;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (chatViewIW != null) {
-      currentUser = chatViewIW!.chatController.currentUser;
-      chatViewIW!.chatController.replyMessageNotifier
-          .addListener(_onReplyMessageRequest);
+    final newController = chatViewIW?.chatController;
+    if (_chatController != newController) {
+      // Remove listener from old controller if any
+      _chatController?.replyMessageNotifier
+          .removeListener(_onReplyMessageRequest);
+
+      _chatController = newController;
+      currentUser = _chatController?.currentUser;
+
+      // Add listener to new controller
+      _chatController?.replyMessageNotifier.addListener(_onReplyMessageRequest);
     }
   }
 
   void _onReplyMessageRequest() {
-    final message = chatViewIW?.chatController.replyMessageNotifier.value;
+    if (!mounted) return;
+    final message = _chatController?.replyMessageNotifier.value;
     if (message != null) {
       assignReplyMessage(message);
-      chatViewIW?.chatController.replyMessageNotifier.value = null;
+      _chatController?.replyMessageNotifier.value = null;
     }
   }
 
@@ -304,7 +313,7 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   void dispose() {
-    chatViewIW?.chatController.replyMessageNotifier
+    _chatController?.replyMessageNotifier
         .removeListener(_onReplyMessageRequest);
     _textEditingController.dispose();
     _focusNode.dispose();
